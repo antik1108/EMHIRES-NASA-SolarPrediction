@@ -23,23 +23,39 @@ y = df_master2['Capacity_Factor']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=67)
 
 # n_jobs=-1 utilizes all cpu cores
-model = RandomForestRegressor(n_estimators=100, random_state=67, n_jobs=-1)
+model = RandomForestRegressor(n_estimators=100, random_state=67, n_jobs=-1, max_depth=12)
 
 model.fit(X_train, y_train)
 
-y_pred = model.predict(X_test)
+ytrain_pred = model.predict(X_train)
+ytest_pred = model.predict(X_test)
 
+mae_train = mean_absolute_error(y_train, ytrain_pred)
+mae_test = mean_absolute_error(y_test, ytest_pred)
 
-mae = mean_absolute_error(y_test, y_pred)
-rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-r2 = r2_score(y_test, y_pred)
+rmse_train = np.sqrt(mean_squared_error(y_train, ytrain_pred))
+rmse_test = np.sqrt(mean_squared_error(y_test, ytest_pred))
+
+r2_train = r2_score(y_train, ytrain_pred)
+r2_test = r2_score(y_test, ytest_pred)  
+
 
 print(f"""
-Mean Absolute Error (MAE):      {mae:.4f}
-Root Mean Squared Error (RMSE): {rmse:.4f}
-R-Squared Accuracy:             {r2:.4f}
+Training:
+      
+Mean Absolute Error (MAE):      {mae_train:.4f}
+Root Mean Squared Error (RMSE): {rmse_train:.4f}
+R-Squared Accuracy:             {r2_train:.4f}
 """)
 
+print("")
+
+print(f"""
+Testing:
+Mean Absolute Error (MAE):      {mae_test:.4f}
+Root Mean Squared Error (RMSE): {rmse_test:.4f}
+R-Squared Accuracy:             {r2_test:.4f}
+""")
 
 # Analysis of the model - 
 
