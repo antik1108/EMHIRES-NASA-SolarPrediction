@@ -1,53 +1,122 @@
-# EMHIRES-NASA Solar Energy Prediction
+# SolarIntel - Solar Energy Generation Prediction
 
-A machine learning pipeline that predicts solar energy generation (capacity factor) across 29 European countries using historical solar output data from the EMHIRES dataset and hourly meteorological data from the NASA POWER API. Two models are trained and compared: Linear Regression and Random Forest Regressor.
+An end-to-end machine learning system that forecasts hourly solar energy output across 29 European countries. The pipeline fuses 15 years of solar capacity factor data from the European Commission's EMHIRES dataset with hourly meteorological observations from NASA's POWER API, trains two regression models, and serves predictions through an interactive web application.
 
----
-
-## **Getting Started**
-
-The best place to start is the **Walkthrough** folder. It contains a detailed Jupyter notebook that walks through the entire pipeline step by step, from loading the raw data to training, evaluating, and exporting both models. Every major decision and operation is documented with explanations.
-
-- [Walkthrough/walkthrough.ipynb](Walkthrough/walkthrough.ipynb) - Full step-by-step pipeline walkthrough with notes and analysis.
-- The EMHIRES reference PDF is also included in the same folder for further reading and understanding of the source dataset and its methodology.
+> **Live Demo:** [huggingface.co/spaces/priyanshutomar2024/SolarIntel](https://huggingface.co/spaces/priyanshutomar2024/SolarIntel)
 
 ---
 
-## **Repository Structure**
+## Highlights
 
-### **Walkthrough/**
-Contains the complete documented walkthrough notebook. Start here to understand what the project does, how the data flows, and what each step accomplishes. The notebook is self-contained and covers data loading, cleaning, merging, encoding, model training, evaluation, visualisation, and custom predictions.
+| | |
+|---|---|
+| **Coverage** | 29 European countries, 2001 - 2015, hourly resolution |
+| **Dataset** | ~3.8 million rows, 34 features |
+| **Models** | Linear Regression (R2 = 0.788) and Random Forest Regressor (R2 = 0.911) |
+| **Stack** | Python, pandas, scikit-learn, matplotlib, seaborn, Streamlit |
+| **Deployment** | Hugging Face Spaces (Streamlit) |
 
-### **Pipeline_Modules/**
-A modular breakdown of the pipeline into individual scripts. Each subfolder contains a standalone Python file for one stage of the pipeline:
-- Dataset Visualisation
-- Cleaning and Transformation
-- Merging
-- Encoding
-- Training and Evaluation (Linear Regression)
-- Training and Evaluation (Random Forest Regressor)
-- Analysis Visualisation (Linear Regression)
-- Analysis Visualisation (Random Forest Regressor)
+---
 
-Use this folder if you want to understand or modify a specific stage in isolation.
+## Getting Started
 
-### **Final_Pipeline/**
-Contains `Final_Pipeline.py`, a single consolidated script that runs the entire pipeline end-to-end in one execution. This is the production-ready version that performs all steps from data loading through to model export.
+If you are new to this project, start with the **Walkthrough** folder. It contains everything you need to understand the full pipeline from first principles:
 
-### **NASA_Data_Fetch/**
-Contains the `fetcher.py` script used to collect hourly weather data (Irradiance, Temperature, Wind Speed) from the NASA POWER API for all 29 EMHIRES countries from 2001 to 2015. This script takes approximately 20+ minutes to run due to the volume of API requests. The resulting CSV is already provided in the Datasets folder, so you do not need to run this unless you want to re-fetch the data.
+| Resource | Description |
+|----------|-------------|
+| [`Walkthrough/walkthrough.ipynb`](Walkthrough/walkthrough.ipynb) | Interactive Jupyter notebook - full pipeline with code, explanations, and visualisations |
+| [`Walkthrough/walkthrough.pdf`](Walkthrough/walkthrough.pdf) | Standalone PDF document covering every step in detail |
+| [`EMHIRES PV Reference`](Walkthrough/emhirespv_gonzalezaparicioetal2017_newtemplate_corrected_last.pdf) | Original EMHIRES methodology paper by Gonzalez Aparicio et al. (2017) |
 
-### **Datasets/**
-Contains the raw and processed datasets in compressed format:
-- `solar_data.zip` - The EMHIRES solar capacity factor CSV and the NASA weather master CSV.
-- `merged_encoded.zip` - The fully merged, cleaned, and one-hot-encoded dataset ready for model training.
+---
 
-### **Models/**
-Contains `solar_models.zip` with the two trained model files:
-- `solar_model_lr.pkl` - Trained Linear Regression model.
-- `solar_model_rfr.pkl` - Trained Random Forest Regressor model.
+## Technology Stack
 
-These can be loaded directly with `joblib` for predictions without retraining.
+| Layer | Technology |
+|-------|------------|
+| Data Processing | pandas, NumPy |
+| Machine Learning | scikit-learn (Linear Regression, Random Forest Regressor) |
+| Visualisation | matplotlib, seaborn |
+| Model Persistence | joblib |
+| Web Application | Streamlit |
+| Data Source | NASA POWER API, EMHIRES PV (JRC) |
+| Hosting | Hugging Face Spaces |
 
-### **Demo_and_Hosting/**
-Contains the interactive Streamlit-based GUI for visualising solar energy forecasting results. The app provides real-time predictions, 24-hour generation profiles, feature importance analysis, seasonal patterns, and model performance metrics. See the folder's README for setup and deployment instructions.
+---
+
+## Repository Structure
+
+```
+EMHIRES-NASA-SolarPrediction/
+├── Walkthrough/              # Start here - full documented walkthrough
+├── Pipeline_Modules/         # Modular per-stage scripts
+├── Final_Pipeline/           # Single-script end-to-end pipeline
+├── NASA_Data_Fetch/          # NASA POWER API data collection
+├── Datasets/                 # Raw and processed data (zipped)
+├── Models/                   # Trained model files (zipped)
+└── Demo_and_Hosting/         # Streamlit app for deployment
+```
+
+### Walkthrough/
+Complete documented walkthrough of the project. Contains the Jupyter notebook (`walkthrough.ipynb`), a formatted PDF version (`walkthrough.pdf`), and the original EMHIRES methodology paper. This is the recommended starting point for anyone looking to understand the pipeline, the data science decisions behind it, and the results.
+
+### Pipeline_Modules/
+A modular breakdown of the pipeline into individual scripts. Each subfolder contains a standalone Python file for one stage:
+
+| Module | Stage |
+|--------|-------|
+| Dataset Visualisation | Raw data exploration and plotting |
+| Cleaning and Transformation | Data integrity checks, reshaping, feature extraction |
+| Merging | Fusing EMHIRES generation data with NASA weather data |
+| Encoding | One-Hot Encoding of country labels |
+| Training and Evaluation (LR) | Linear Regression model training and metrics |
+| Training and Evaluation (RFR) | Random Forest Regressor training and metrics |
+| Analysis Visualisation (LR) | Diagnostic plots for Linear Regression |
+| Analysis Visualisation (RFR) | Diagnostic plots for Random Forest |
+
+### Final_Pipeline/
+Contains `Final_Pipeline.py` - a single consolidated script that runs the entire pipeline end-to-end in one execution, from data loading through to model export.
+
+### NASA_Data_Fetch/
+Contains `fetcher.py`, the script used to collect hourly weather data (Irradiance, Temperature, Wind Speed) from the NASA POWER API for all 29 countries from 2001 to 2015. The fetch takes approximately 20+ minutes due to API volume. The resulting CSV is already provided in the Datasets folder.
+
+### Datasets/
+Compressed raw and processed datasets:
+- `solar_data.zip` - EMHIRES solar capacity factor CSV and NASA weather master CSV
+- `merged_encoded.zip` - Fully merged, cleaned, and encoded dataset ready for training
+
+### Models/
+Contains `solar_models.zip` with the two trained model files (`solar_model_lr.pkl` and `solar_model_rfr.pkl`). Load directly with `joblib` for inference without retraining.
+
+### Demo_and_Hosting/
+The Streamlit web application deployed on Hugging Face Spaces. Provides real-time predictions, 24-hour generation profiles, feature importance analysis, seasonal patterns, and model performance metrics.
+
+---
+
+## Model Performance
+
+| Metric | Linear Regression | Random Forest Regressor |
+|--------|-------------------|-------------------------|
+| MAE | 0.0534 | 0.0280 |
+| RMSE | 0.0845 | 0.0547 |
+| R2 | 0.7880 | 0.9112 |
+
+> Evaluated on a held-out 20% test set (762,538 samples). `random_state=67` across all splits for reproducibility.
+
+---
+
+## Roadmap
+
+- [x] Data pipeline (EMHIRES + NASA POWER fusion)
+- [x] Model training and evaluation (LR + RFR)
+- [x] Interactive Streamlit dashboard
+- [x] Deployment on Hugging Face Spaces
+- [ ] Agent-based AI extension - autonomous churn/degradation reasoning with retrieval-augmented generation (RAG) for intervention strategy planning
+- [ ] LangGraph integration for stateful multi-step agent workflows
+- [ ] Expanded forecasting with additional weather parameters and country-level granularity
+
+---
+
+## License
+
+This project uses publicly available data from the [European Commission Joint Research Centre (EMHIRES)](https://setis.ec.europa.eu/european-commission-services/emhires) and the [NASA POWER API](https://power.larc.nasa.gov/).
