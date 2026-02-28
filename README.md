@@ -111,9 +111,7 @@ The Streamlit web application deployed on Hugging Face Spaces. Provides real-tim
 - [x] Model training and evaluation (LR + RFR)
 - [x] Interactive Streamlit dashboard
 - [x] Deployment on Hugging Face Spaces
-- [ ] Agent-based AI extension - autonomous churn/degradation reasoning with retrieval-augmented generation (RAG) for intervention strategy planning
-- [ ] LangGraph integration for stateful multi-step agent workflows
-- [ ] Expanded forecasting with additional weather parameters and country-level granularity
+- [ ] AI agent-based expansion for intelligent decision support
 
 ---
 
